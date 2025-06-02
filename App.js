@@ -1,12 +1,36 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { Dimensions, View, StyleSheet } from 'react-native';
+import { VideoView, useVideoPlayer } from 'expo-video';
 
 export default function App() {
+  const player = useVideoPlayer(
+      'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+      (player) => {
+        player.loop = false;
+        player.staysActiveInBackground = true;
+        player.showNowPlayingNotification = true;
+        player.subtitleTrack = null;
+        player.timeUpdateEventInterval = 4;
+        player.preservesPitch = true;
+        player.play();
+      }
+  );
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+      <View style={styles.container}>
+        <VideoView
+            player={player}
+            nativeControls
+            allowsFullscreen
+            allowsPictureInPicture
+            startsPictureInPictureAutomatically
+            style={{
+              width: Dimensions.get('window').width,
+              height: Dimensions.get('window').width * (9 / 16),
+            }}
+        />
+      </View>
   );
 }
 
